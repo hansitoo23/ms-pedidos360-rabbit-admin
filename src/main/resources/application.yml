@@ -1,0 +1,41 @@
+
+spring:
+  application:
+    name: ms-pedidos360-rabbit-admin
+  rabbitmq:
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 10
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:pedidos360}
+    password: ${RABBITMQ_PASSWORD:Pedidos360_Local_2026}
+    virtual-host: ${RABBITMQ_VHOST:/}
+
+server:
+  port: ${SERVER_PORT:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+pedidos360:
+  rabbit:
+    exchanges:
+      direct: cmd.direct
+      topic: cmd.topic
+      dead-letter: cmd.dead.dlx
+    queues:
+      email: q.cmd.email
+      email-dlq: q.cmd.email.dlq
+      kitchen: q.cmd.kitchen
+      kitchen-dlq: q.cmd.kitchen.dlq
+      invoice: q.cmd.invoice
+      invoice-dlq: q.cmd.invoice.dlq
+    routing-keys:
+      email: email.send
+      kitchen: kitchen.ticket
+      invoice: invoice.gen
